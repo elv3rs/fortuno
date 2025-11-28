@@ -221,12 +221,13 @@ contains
                 ! -}{+
                 block
                   type(argument_value), allocatable :: argvalbuffer(:)
+                  type(string_item) :: sval
                   integer :: nn
+                  sval%value = cmdargs(iarg)%value
                   nn = size(argumentvalues%argvals)
                   allocate(argvalbuffer(nn + 1))
                   argvalbuffer(1 : nn) = argumentvalues%argvals
-                  argvalbuffer(nn + 1) = argument_value(argdef%name, &
-                      & argval=string_item(cmdargs(iarg)%value))
+                  argvalbuffer(nn + 1) = argument_value(argdef%name, argval=sval)
                   call move_alloc(argvalbuffer, argumentvalues%argvals)
                 end block
                 ! +}
