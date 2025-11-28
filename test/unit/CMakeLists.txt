@@ -15,17 +15,22 @@ target_sources(
   testapp.f90
 )
 target_link_libraries(fortuno_test_unit_testapp PRIVATE Fortuno::fortuno_serial)
-add_test(NAME unit COMMAND testapp)
 
 
-set(test_list_file "${CMAKE_CURRENT_BINARY_DIR}/testlist.cmake")
-set(test_executable "$<TARGET_FILE:fortuno_test_unit_testapp>")
+function(register_tests target)
+  set(test_list_file "${CMAKE_CURRENT_BINARY_DIR}/testlist.cmake")
+  set(test_executable "$<TARGET_FILE:${target}>")
 
-add_custom_command(
-    TARGET fortuno_test_unit_testapp POST_BUILD
+  add_custom_command(
+    TARGET ${target} POST_BUILD
     COMMAND "${test_executable}" --emit-cmake-testlist --cmake-outfile "${test_list_file}" --executable "${test_executable}"
     BYPRODUCTS "${test_list_file}"
     WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}"
-)
+  )
+  
+  # Point ctest to the new tests
+  set_property(DIRECTORY APPEND PROPERTY TEST_INCLUDE_FILE "${test_list_file}")
+endfunction()
 
-set_property(DIRECTORY APPEND PROPERTY TEST_INCLUDE_FILE "${test_list_file}")
+
+register_tests(fortuno_test_unit_testapp)
