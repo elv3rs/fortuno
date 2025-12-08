@@ -78,7 +78,7 @@ set(discover_command \${cross_emulator} \"\${test_executable}\" --list ${ARG_TES
 
 # Query Fortuno executable for tests
 if(NOT EXISTS \"\${test_executable}\")
-    message(WARNING \"Could not find test executable: \${test_executable}. (Have you built te project?) Skipping test discovery.\")
+    message(WARNING \"Could not find test executable: \${test_executable}. (Have you built the project?) Skipping test discovery.\")
     cmake_policy(POP)
     return()
 endif()
