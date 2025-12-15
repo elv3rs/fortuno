@@ -7,7 +7,7 @@ include_guard(GLOBAL)
 #     [TEST_PATTERN pattern]   # (Optional) pattern to filter tests (default is none, i.e. all tests)
 #     [WORKING_DIRECTORY dir]  # (Optional) working directory for tests (default is CMAKE_CURRENT_BINARY_DIR)
 # Description:
-# Query the Fortuno test executable for its list of tests and register them with CTest.
+# Query the Fortuno test executable for its list of tests and individually register them with CTest.
 # Querying is performed either at build time (default POST_BUILD mode) or at test time (PRE_TEST_DISCOVERY mode).
 # In the former case, an additional testlist.cmake file is generated after building the target to be included by CTest.
 # In the latter case, the test discovery is performed anew each time tests are run.
