@@ -1,8 +1,12 @@
 include_guard(GLOBAL)
-
-function(fortuno_discover_tests target)
 # Usage:
-# fortuno_discover_tests 
+# fortuno_discover_tests(target,
+#     [USE_PRE_TEST_DISCOVERY] # (Optional) flag to use pre-test discovery mode (default is post-build)
+#     [TEST_PREFIX prefix]     # (Optional) prefix for test names
+#     [TEST_SUFFIX suffix]     # (Optional) suffix for test names
+#     [TEST_PATTERN pattern]   # (Optional) pattern to filter tests (default is none, i.e. all tests)
+#     [WORKING_DIRECTORY dir]  # (Optional) working directory for tests (default is CMAKE_CURRENT_BINARY_DIR)
+function(fortuno_discover_tests target)
     if (NOT TARGET ${target})
         message(FATAL_ERROR "fortuno_discover_tests: target '${target}' does not exist")
     endif ()
