@@ -132,6 +132,9 @@ if (FORTUNO_INSTALL)
     FILE FortunoTargets.cmake
     NAMESPACE Fortuno::
   )
+  if (NOT PROJECT_IS_TOP_LEVEL)
+    include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/FortunoDiscoverTests.cmake)
+  endif()
   install(
     EXPORT FortunoTargets
     FILE FortunoTargets.cmake
