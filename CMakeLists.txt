@@ -120,6 +120,7 @@ if (FORTUNO_INSTALL)
   )
   install(
     FILES
+      cmake/FortunoDiscoverTests.cmake
       ${CMAKE_CURRENT_BINARY_DIR}/FortunoConfigVersion.cmake
       ${CMAKE_CURRENT_BINARY_DIR}/FortunoConfig.cmake
     DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/Fortuno
