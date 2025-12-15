@@ -132,9 +132,6 @@ if (FORTUNO_INSTALL)
     FILE FortunoTargets.cmake
     NAMESPACE Fortuno::
   )
-  if (NOT PROJECT_IS_TOP_LEVEL)
-    include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/FortunoDiscoverTests.cmake)
-  endif()
   install(
     EXPORT FortunoTargets
     FILE FortunoTargets.cmake
@@ -147,6 +144,9 @@ endif ()
 
 # Make project available for FetchContent
 if (NOT PROJECT_IS_TOP_LEVEL)
+  # Make fortuno_discover_tests() available
+  include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/FortunoDiscoverTests.cmake)
+
   # Propagate variables
   if (CMAKE_VERSION VERSION_LESS 3.25)
     # TODO: Remove when required minimum cmake version is >= 3.25
