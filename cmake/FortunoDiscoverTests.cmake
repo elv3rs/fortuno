@@ -107,7 +107,7 @@ endif ()
 # Actually discover each test
 foreach(test_name IN LISTS testlist)
     set(ctest_name \"\${test_prefix}\${test_name}\${test_suffix}\")
-    set(test_command \${cross_emulator} \"\${test_executable}\" \"\${test_name}\" --fail-on-missing-test)
+    set(test_command \${cross_emulator} \"\${test_executable}\" \"\${test_name}\")
 
     # Either write tests to file, or add directly
     if (${ARG_USE_PRE_TEST_DISCOVERY})

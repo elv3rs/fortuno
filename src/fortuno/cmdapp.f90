@@ -90,6 +90,7 @@ contains
     type(test_selection), allocatable :: selections(:)
     type(string_item), allocatable :: selectors(:), testnames(:)
     type(error_info), allocatable :: error
+    logical :: strict_matching_success
     integer :: itest
 
     exitcode = -1
@@ -102,14 +103,28 @@ contains
       end if
       call get_selections(selectors, selections)
     end if
-    call this%driver%register_tests(testitems, selections=selections)
+    call this%driver%register_tests(testitems, strict_matching_success, selections=selections)
+    
+    if (.not. strict_matching_success .or. this%argvals%has("disable-strict-matching") ) then
+      call this%logger%log_error("Error: One or more test selection arguments had no effect.&
+          & Use --disable-strict-matching to disable this error.")
+      exitcode = 1
+    end if
+
+    call this%driver%get_test_names(testnames)
 
     if (this%argvals%has("list")) then
-      call this%driver%get_test_names(testnames)
       do itest = 1, size(testnames)
         call this%logger%log_message(testnames(itest)%value)
       end do
       exitcode = 0
+      return
+    end if
+
+    if (.not. this%argvals%has("allow-empty-run") .and. size(testnames) == 0) then
+      call this%logger%log_error("Error: No tests selected for execution.&
+          & Use --allow-empty-run to disable this error.")
+      exitcode = 1
       return
     end if
 
@@ -125,17 +140,9 @@ contains
     !> Exit code of the test run (0 - success, 1 - failure)
     integer, intent(out) :: exitcode
 
-    logical :: should_run_tests, did_run_tests
-
     call this%driver%run_tests(this%logger)
 
-    should_run_tests = this%argvals%has("fail-on-missing-test") 
-    did_run_tests = this%driver%driveresult%teststats(teststatus%succeeded) > 0
-
     if (.not. this%driver%driveresult%successful) then
-      exitcode = 1
-    else if (should_run_tests .and. .not. did_run_tests) then
-      call this%logger%log_message("Error: No tests ran, but --fail-on-missing-test specified.")
       exitcode = 1
     else
       exitcode = 0
@@ -196,13 +203,16 @@ contains
     !     & &
     !     & ]
     ! -}{+
-    allocate(argdefs(3))
-    argdefs(1) =  argument_def("list", argtypes%bool, shortopt="l", longopt="list",&
+    allocate(argdefs(4))
+    argdefs(1) = argument_def("list", argtypes%bool, shortopt="l", longopt="list",&
         & helpmsg="show list of tests to run and exit")
-    argdefs(2) = argument_def("fail-on-missing-test", argtypes%bool, &
-        & longopt="fail-on-missing-test",&
-        & helpmsg="Return nonzero status code if no tests were executed.")
-    argdefs(3) = argument_def("tests", argtypes%stringlist,&
+    argdefs(2) = argument_def("disable-strict-matching", argtypes%bool, &
+        & longopt="disable-strict-matching",&
+        & helpmsg="Allow test selection arguments with no effect.")
+    argdefs(3) = argument_def("allow-empty-run", argtypes%bool, &
+        & longopt="allow-empty-run",&
+        & helpmsg="Dont fail if, e.g. due to a overconstrained selection, no tests were executed.")
+    argdefs(4) = argument_def("tests", argtypes%stringlist,&
         & helpmsg="list of tests and suites to include or to exclude when prefixed with '~' (e.g.&
         & 'somesuite ~somesuite/avoidedtest' would run all tests except 'avoidedtest' in the test&
         & suite 'somesuite')")
