@@ -410,7 +410,7 @@ contains
     character(*), intent(in) :: argument, helpmsg
     integer, intent(in) :: linelength
 
-    integer, parameter :: offset = 25
+    integer, parameter :: offset = 29
     character(20) :: formatstr
     character(linelength) :: buffer
     integer :: maxwidth, curpos, seppos
