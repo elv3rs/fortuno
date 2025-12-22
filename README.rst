@@ -4,8 +4,8 @@ Fortuno – flextensible unit testing framework for Fortran
 
 **Fortuno** (Fortran Unit Testing Objects) is a flexible & extensible,
 object-oriented unit testing framework designed for the Fortran programming
-language. It emphasizes ease of use by minimizing boiler plate code when writing
-tests while prioratizing modularity and extensibility. Fortuno provides the
+language. It emphasizes ease of use by minimizing boilerplate code when writing
+tests while prioritizing modularity and extensibility. Fortuno provides the
 essential building blocks to help developers create customized unit testing
 solutions.
 
