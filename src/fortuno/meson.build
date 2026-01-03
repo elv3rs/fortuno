@@ -11,6 +11,8 @@ fortuno_sources += files(
   'cmdapp.f90',
   'consolelogger.f90',
   'env.f90',
+  'junitxmllogger.f90',
+  'multilogger.f90',
   'testcontext.f90',
   'testdriver.f90',
   'testinfo.f90',

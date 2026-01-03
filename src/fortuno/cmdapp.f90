@@ -11,6 +11,8 @@ module fortuno_cmdapp
   use fortuno_testdriver, only : test_driver, test_selection
   use fortuno_testinfo, only : teststatus
   use fortuno_testlogger, only : test_logger
+  use fortuno_multilogger, only : multi_logger
+  use fortuno_junitxmllogger, only : junit_xml_logger
   implicit none
 
   private
@@ -48,6 +50,30 @@ contains
 
     call this%parse_args(exitcode)
     if (exitcode >= 0) return
+
+    if (this%argvals%has("junit")) then
+       block
+         type(multi_logger) :: mlogger
+         type(junit_xml_logger) :: jlogger
+         type(error_info), allocatable :: error
+         character(:), allocatable :: filename
+         
+         call this%argvals%get_value("junit", filename, error)
+         if (allocated(error)) then
+           call this%logger%log_error("internal error: " // error%msg)
+           exitcode = error%code
+           return
+         end if
+         
+         call mlogger%add_logger(this%logger)
+         jlogger%filename = filename
+         call mlogger%add_logger(jlogger)
+         
+         if (allocated(this%logger)) deallocate(this%logger)
+         allocate(this%logger, source=mlogger)
+       end block
+    end if
+
     call this%register_tests(tests, exitcode)
     if (exitcode >= 0) return
     call this%run_tests(exitcode)
@@ -203,7 +229,7 @@ contains
     !     & &
     !     & ]
     ! -}{+
-    allocate(argdefs(4))
+    allocate(argdefs(5))
     argdefs(1) = argument_def("list", argtypes%bool, shortopt="l", longopt="list",&
         & helpmsg="show list of tests to run and exit")
     argdefs(2) = argument_def("disable-strict-matching", argtypes%bool, &
@@ -216,6 +242,10 @@ contains
         & helpmsg="list of tests and suites to include or to exclude when prefixed with '~' (e.g.&
         & 'somesuite ~somesuite/avoidedtest' would run all tests except 'avoidedtest' in the test&
         & suite 'somesuite')")
+    argdefs(5) = argument_def("junit", argtypes%string, &
+        & longopt="junit",&
+        & helpmsg="Path to output JUnit XML report.")
+
     ! +}
 
   end function default_argument_defs
