@@ -12,6 +12,7 @@ set_target_properties(
 target_sources(
   fortuno_test_unit_testapp PRIVATE
   test_checkers.f90
+  test_junitxmllogger.f90
   testapp.f90
 )
 target_link_libraries(fortuno_test_unit_testapp PRIVATE Fortuno::fortuno_serial)

@@ -6,10 +6,12 @@
 program testapp
   use fortuno_serial, only : execute_serial_cmd_app, test_list
   use test_checkers, only : checkers_tests => tests
+  use test_junitxmllogger, only : junit_tests => tests
   implicit none
 
   call execute_serial_cmd_app(test_list([&
-      checkers_tests()&
+      checkers_tests(),&
+      junit_tests()&
   ]))
 
 end program testapp
