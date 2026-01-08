@@ -105,9 +105,9 @@ contains
     end if
     call this%driver%register_tests(testitems, strict_matching_success, selections=selections)
     
-    if (.not. strict_matching_success .or. this%argvals%has("disable-strict-matching") ) then
+    if (.not. strict_matching_success .or. this%argvals%has("ignore-no-match") ) then
       call this%logger%log_error("Error: One or more test selection arguments had no effect.&
-          & Use --disable-strict-matching to disable this error.")
+          & Use --ignore-no-match to disable this error.")
       exitcode = 1
     end if
 
@@ -118,13 +118,6 @@ contains
         call this%logger%log_message(testnames(itest)%value)
       end do
       exitcode = 0
-      return
-    end if
-
-    if (.not. this%argvals%has("allow-empty-run") .and. size(testnames) == 0) then
-      call this%logger%log_error("Error: No tests selected for execution.&
-          & Use --allow-empty-run to disable this error.")
-      exitcode = 1
       return
     end if
 
@@ -192,9 +185,9 @@ contains
     !     & argument_def("list", argtypes%bool, shortopt="l", longopt="list",&
     !     & helpmsg="show list of tests to run and exit"),&
     !     & &
-    !     & argument_def("fail-on-missing-test", argtypes%bool, &
-    !     & longopt="fail-on-missing-test",&
-    !     & helpmsg="Return nonzero status code if no tests were executed."),&
+    !     & argument_def("ignore-no-match", argtypes%bool, &
+    !     & longopt="ignore-no-match",&
+    !     & helpmsg="Allow test selection arguments with no effect."),&
     !     & &
     !     & argument_def("tests", argtypes%stringlist,&
     !     & helpmsg="list of tests and suites to include or to exclude when prefixed with '~' (e.g.&
@@ -207,12 +200,9 @@ contains
     argdefs(1) = argument_def("list", argtypes%bool, shortopt="l", longopt="list",&
         & helpmsg="show list of tests to run and exit")
     argdefs(2) = argument_def("disable-strict-matching", argtypes%bool, &
-        & longopt="disable-strict-matching",&
+        & longopt="ignore-no-match",&
         & helpmsg="Allow test selection arguments with no effect.")
-    argdefs(3) = argument_def("allow-empty-run", argtypes%bool, &
-        & longopt="allow-empty-run",&
-        & helpmsg="Dont fail if, e.g. due to a overconstrained selection, no tests were executed.")
-    argdefs(4) = argument_def("tests", argtypes%stringlist,&
+    argdefs(D) = argument_def("tests", argtypes%stringlist,&
         & helpmsg="list of tests and suites to include or to exclude when prefixed with '~' (e.g.&
         & 'somesuite ~somesuite/avoidedtest' would run all tests except 'avoidedtest' in the test&
         & suite 'somesuite')")
