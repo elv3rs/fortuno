@@ -196,13 +196,13 @@ contains
     !     & &
     !     & ]
     ! -}{+
-    allocate(argdefs(4))
+    allocate(argdefs(3))
     argdefs(1) = argument_def("list", argtypes%bool, shortopt="l", longopt="list",&
         & helpmsg="show list of tests to run and exit")
     argdefs(2) = argument_def("disable-strict-matching", argtypes%bool, &
         & longopt="ignore-no-match",&
         & helpmsg="Allow test selection arguments with no effect.")
-    argdefs(D) = argument_def("tests", argtypes%stringlist,&
+    argdefs(3) = argument_def("tests", argtypes%stringlist,&
         & helpmsg="list of tests and suites to include or to exclude when prefixed with '~' (e.g.&
         & 'somesuite ~somesuite/avoidedtest' would run all tests except 'avoidedtest' in the test&
         & suite 'somesuite')")
