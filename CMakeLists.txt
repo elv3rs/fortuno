@@ -118,6 +118,11 @@ if (FORTUNO_INSTALL)
       ${CMAKE_CURRENT_BINARY_DIR}/FortunoConfig.cmake
       INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/Fortuno
   )
+  configure_file(
+    cmake/FortunoDiscoverTests.cmake
+    ${CMAKE_CURRENT_BINARY_DIR}/FortunoDiscoverTests.cmake
+    COPYONLY
+  )
   install(
     FILES
       cmake/FortunoDiscoverTests.cmake
