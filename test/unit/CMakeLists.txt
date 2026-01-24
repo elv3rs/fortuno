@@ -17,6 +17,6 @@ target_sources(
 target_link_libraries(fortuno_test_unit_testapp PRIVATE Fortuno::fortuno_serial)
 
 
-include(${PROJECT_SOURCE_DIR}/cmake/FortunoDiscoverTests.cmake)
+include(${PROJECT_SOURCE_DIR}/cmake/Fortuno.cmake)
 
 fortuno_discover_tests(fortuno_test_unit_testapp USE_PRE_TEST_DISCOVERY)
